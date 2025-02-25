@@ -1,4 +1,3 @@
-from dataclasses import Field
 import os
 import argparse
 import torch
@@ -11,7 +10,7 @@ def train(env, algo_name, device='cpu', save=False):
     model = algo('MlpPolicy', env, device=device, verbose=1)
     model.learn(total_timesteps=Config.total_timesteps)
     if save:
-        if algo_name == 'SimpleBattileShip':
+        if Config.env_name == 'SimpleBattleShip':
             rt = str(Field_Config.random_translation)
             pat = Field_Config.pattern
             modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_ramdom_{rt}_{Config.total_timesteps}'  # noqa: E501
@@ -22,7 +21,7 @@ def train(env, algo_name, device='cpu', save=False):
 
 
 def inference(env, algo_name, device='cpu'):
-    if algo_name == 'SimpleBattileShip':
+    if Config.env_name == 'SimpleBattleShip':
         rt = str(Field_Config.random_translation)
         pat = Field_Config.pattern
         modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_ramdom_{rt}_{Config.total_timesteps}'  # noqa: E501

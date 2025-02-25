@@ -21,7 +21,7 @@ def create_env(env_name, render_mode=None):
     env_list = gym.envs.registry.keys()
     if env_name in env_list:
         env = gym.make(Config.env_name, render_mode=render_mode)
-    elif env_name == 'SimpleBattileShip':
+    elif env_name == 'SimpleBattleShip':
         env = SimpleBattileShip()
         env = DiscreteWrapper(env)
     else:

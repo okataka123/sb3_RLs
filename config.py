@@ -9,7 +9,7 @@ class Config:
 
     # env_name = 'CartPole-v1'
     # env_name = 'LunarLander-v2'
-    env_name = 'SimpleBattileShip'
+    env_name = 'SimpleBattleShip'
 
     algo_dict = {
         'PPO': PPO,
@@ -24,6 +24,6 @@ class Field_Config:
     # 船の種類数
     num_ship_kind = 1
     # 陣形パターン
-    pattern = 4
+    pattern = 1
     # 陣形パターンを平行移動するかどうか？
-    random_translation = False
+    random_translation = True

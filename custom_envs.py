@@ -50,7 +50,7 @@ class SimpleBattileShip(gym.Env):
         y = int(action[1])
         pattern = int(action[2])
         pattern_str = chr(ord('A') + int(pattern))
-        print(f'x = {x}, y = {y}, pat = {pattern_str}')
+        # print(f'x = {x}, y = {y}, pat = {pattern_str}')
         terminated = False
         truncated = False
         reward = -1
@@ -83,24 +83,75 @@ class SimpleBattileShip(gym.Env):
 
         if Field_Config.pattern == 1:
             # field patren 1
-            enemy_pos = dict()
-            enemy_pos[(4, 2)] = 'A'
-            enemy_pos[(4, 5)] = 'A'
+            if not Field_Config.random_translation:
+                enemy_pos = dict()
+                enemy_pos[(4, 2)] = 'A'
+                enemy_pos[(4, 5)] = 'A'
+            else:
+                enemy_pos = self.generate_random_pos_pat1()
 
         elif Field_Config.pattern == 4:
             # field patren 4
-            enemy_pos = dict()
-            enemy_pos[(2, 2)] = 'A'
-            enemy_pos[(2, 5)] = 'A'
-            enemy_pos[(5, 5)] = 'A'
-            enemy_pos[(5, 2)] = 'A'
-            
+            if not Field_Config.random_translation:
+                enemy_pos = dict()
+                enemy_pos[(2, 2)] = 'A'
+                enemy_pos[(2, 5)] = 'A'
+                enemy_pos[(5, 5)] = 'A'
+                enemy_pos[(5, 2)] = 'A'
+            else:
+                enemy_pos = self.generate_random_pos_pat4()
+
         else:
             raise NotImplementedError
 
         self.n_enemy = len(enemy_pos)
-
         return enemy_pos
+
+
+    def generate_random_pos_pat1(self):
+        diff_x = 3
+        while True:
+            row_1 = np.random.randint(0, 8)
+            col_1 = np.random.randint(0, 8)
+            row_2 = row_1
+            col_2 = col_1 + diff_x
+            cond = (col_2 < 8)
+            if cond:
+                enemy_pos = dict()
+                enemy_pos[(row_1, col_1)] = 'A'
+                enemy_pos[(row_2, col_2)] = 'A'
+                print('enemy_pos =', enemy_pos)
+                break
+        return enemy_pos
+
+
+    def generate_random_pos_pat4(self):
+        diff_x_1 = 3
+        diff_y_1 = 0
+        diff_x_2 = 0
+        diff_y_2 = 3
+        diff_x_3 = 3
+        diff_y_3 = 3
+        while True:
+            row_1 = np.random.randint(0, 8)
+            col_1 = np.random.randint(0, 8)
+            row_2 = row_1 + diff_y_1
+            col_2 = col_1 + diff_x_1
+            row_3 = row_1 + diff_y_2
+            col_3 = col_1 + diff_x_2
+            row_4 = row_1 + diff_y_3
+            col_4 = col_1 + diff_x_3
+            cond = (row_2 < 8) & (col_2 < 8) & (row_3 < 8) & (col_3 < 8) & (row_4 < 8) & (col_4 < 8)  # noqa: E501
+            if cond:
+                enemy_pos = dict()
+                enemy_pos[(row_1, col_1)] = 'A'
+                enemy_pos[(row_2, col_2)] = 'A'
+                enemy_pos[(row_3, col_3)] = 'A'
+                enemy_pos[(row_4, col_4)] = 'A'
+                print('enemy_pos =', enemy_pos)
+                break
+        return enemy_pos
+
 
 
 def test_env():
