@@ -1,25 +1,36 @@
+from dataclasses import Field
 import os
 import argparse
-from config import config
+import torch
+from config import Config, Field_Config
 from env_wrapper import create_env
 
 
-def train(env, algo_name, save=False):
-    algo = config.algo_dict[algo_name]
-    model = algo('MlpPolicy', env, verbose=1)
-    model.learn(total_timesteps=config.total_timesteps)
+def train(env, algo_name, device='cpu', save=False):
+    algo = Config.algo_dict[algo_name]
+    model = algo('MlpPolicy', env, device=device, verbose=1)
+    model.learn(total_timesteps=Config.total_timesteps)
     if save:
-        modelfile = f'model_{config.env_name}_{algo_name}_{config.total_timesteps}'
+        if algo_name == 'SimpleBattileShip':
+            rt = str(Field_Config.random_translation)
+            pat = Field_Config.pattern
+            modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_ramdom_{rt}_{Config.total_timesteps}'  # noqa: E501
+        else:
+            modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}'
         path = os.path.join('trained_models', modelfile)
         model.save(path)
 
 
-def inference(env, algo_name):
-    modelfile = f'model_{config.env_name}_{algo_name}_{config.total_timesteps}'
+def inference(env, algo_name, device='cpu'):
+    if algo_name == 'SimpleBattileShip':
+        rt = str(Field_Config.random_translation)
+        pat = Field_Config.pattern
+        modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_ramdom_{rt}_{Config.total_timesteps}'  # noqa: E501
+    else:
+        modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}'
     path = os.path.join('trained_models', modelfile)
-
-    algo = config.algo_dict[algo_name]
-    model = algo.load(path)
+    algo = Config.algo_dict[algo_name]
+    model = algo.load(path, device=device)
     state, _ = env.reset()
 
     while True:
@@ -38,18 +49,19 @@ def main():
     parser.add_argument('mode')
     parser.add_argument('algo')
     args = parser.parse_args()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     if args.mode == 'training':
         print('start training...')
-        env = create_env(config.env_name)
-        train(env, args.algo, save=True)
+        env = create_env(Config.env_name)
+        train(env, args.algo, device=device, save=True)
 
     elif args.mode == 'inference':
         print('start inference...')
-        env = create_env(config.env_name, render_mode='human')
+        env = create_env(Config.env_name, render_mode='human')
         for i in range(100):
             print('i =', i)
-            inference(env, args.algo)
+            inference(env, args.algo, device=device)
     else:
         raise NotImplementedError
 

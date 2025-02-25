@@ -2,8 +2,8 @@ import numpy as np
 import gymnasium as gym
 from gymnasium.spaces import Discrete
 
-from custum_envs import SimpleBattileShip
-from config import config
+from custom_envs import SimpleBattileShip
+from config import Config
 
 
 class DiscreteWrapper(gym.ActionWrapper):
@@ -20,7 +20,7 @@ class DiscreteWrapper(gym.ActionWrapper):
 def create_env(env_name, render_mode=None):
     env_list = gym.envs.registry.keys()
     if env_name in env_list:
-        env = gym.make(config.env_name, render_mode=render_mode)
+        env = gym.make(Config.env_name, render_mode=render_mode)
     elif env_name == 'SimpleBattileShip':
         env = SimpleBattileShip()
         env = DiscreteWrapper(env)
@@ -28,10 +28,6 @@ def create_env(env_name, render_mode=None):
         raise NotImplementedError
 
     return env
-
-
-def transform_interface():
-    pass
 
 
 def test():

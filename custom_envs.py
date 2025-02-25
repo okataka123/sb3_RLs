@@ -4,21 +4,21 @@ import numpy as np
 import torch
 import gymnasium as gym
 from gymnasium import spaces
+from config import Field_Config
 
 class SimpleBattileShip(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
         super().__init__()
-        self.grid_size = 8
-        self.num_ship_kind = 1
+        self.grid_size = Field_Config.grid_size
+        self.num_ship_kind = Field_Config.num_ship_kind
         self.action_space = spaces.MultiDiscrete([self.grid_size, self.grid_size, self.num_ship_kind])  # noqa: E501
-        self.observation_space = spaces.MultiDiscrete(np.array([[[self.num_ship_kind] * self.grid_size] * self.grid_size] * 2))  # noqa: E501
+        self.observation_space = spaces.Box(low=0, high=1, shape=(self.grid_size, self.grid_size, self.num_ship_kind, 2), dtype=np.int32)  # noqa: E501
         self.n_detected = 0
-        self.reset()
 
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         self.enemy_pos = self.init_enemy_pos()
 
         # 探索結果除法
@@ -35,7 +35,8 @@ class SimpleBattileShip(gym.Env):
         self.state[random_x, random_y, random_value_no, 0] = 1
         self.state_gui[random_x, random_y] = random_value_str
         self.n_detected = 1
-        return torch.FloatTensor(self.state)
+        info = {}
+        return torch.FloatTensor(self.state), info
 
 
     def step(self, action):
@@ -79,22 +80,21 @@ class SimpleBattileShip(gym.Env):
         '''
         initialize enemy position.
         '''
-        pattern = 1
 
-        if pattern == 1:
+        if Field_Config.pattern == 1:
             # field patren 1
             enemy_pos = dict()
             enemy_pos[(4, 2)] = 'A'
             enemy_pos[(4, 5)] = 'A'
 
-        elif pattern == 4:
+        elif Field_Config.pattern == 4:
             # field patren 4
             enemy_pos = dict()
             enemy_pos[(2, 2)] = 'A'
             enemy_pos[(2, 5)] = 'A'
             enemy_pos[(5, 5)] = 'A'
             enemy_pos[(5, 2)] = 'A'
-
+            
         else:
             raise NotImplementedError
 
