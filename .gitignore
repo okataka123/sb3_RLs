@@ -169,3 +169,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# add
+log/
+!log/.gitkeep
+trained_models/
+!trained_models/.gitkeep

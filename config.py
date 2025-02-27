@@ -12,11 +12,29 @@ class Config:
     env_name = 'SimpleBattleShip'
 
     algo_dict = {
-        'PPO': PPO,
         'DQN': DQN,
+        'PPO': PPO,
         'A2C': A2C,
         'SAC': SAC,
     }
+
+    # DQN params
+    batch_size = 128
+    seed = 0
+    tau = 0.001
+
+    learn_kwargs = {
+        'DQN': {
+            'policy': 'MlpPolicy',
+            'batch_size': batch_size,
+            'seed': seed,
+            'tau': tau,
+        },
+        'PPO': {},
+        'A2C': {},
+        'SAC': {},
+    }
+
 
 class Field_Config:
     # フィールドサイズ
@@ -26,4 +44,14 @@ class Field_Config:
     # 陣形パターン
     pattern = 1
     # 陣形パターンを平行移動するかどうか？
-    random_translation = True
+    random_translation = False
+
+
+class Inference_Config:
+    pretrained_model_name = ''
+
+
+if __name__ == '__main__':
+    print(Config.learn_kwargs['DQN'])
+    print(**Config.learn_kwargs['DQN'])
+    
