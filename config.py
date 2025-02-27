@@ -2,10 +2,10 @@ from stable_baselines3 import PPO, DQN, A2C, SAC
 
 class Config:
     # total_timesteps = 1024000
-    # total_timesteps = 512000
+    total_timesteps = 512000
     # total_timesteps = 256000
     # total_timesteps = 128000
-    total_timesteps = 64000
+    # total_timesteps = 64000
 
     # env_name = 'CartPole-v1'
     # env_name = 'LunarLander-v2'
@@ -29,6 +29,9 @@ class Config:
             'batch_size': batch_size,
             'seed': seed,
             'tau': tau,
+            'policy_kwargs': {
+                'net_arch': [128, 128],
+            },
         },
         'PPO': {},
         'A2C': {},
@@ -44,11 +47,14 @@ class Field_Config:
     # 陣形パターン
     pattern = 1
     # 陣形パターンを平行移動するかどうか？
-    random_translation = False
+    random_translation = True
 
 
 class Inference_Config:
-    pretrained_model_name = ''
+    # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_False_64000_20250227-232357'
+    pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_True_512000_20250228-001659'
+
+
 
 
 if __name__ == '__main__':

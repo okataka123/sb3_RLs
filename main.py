@@ -29,7 +29,7 @@ def train(env, algo_name, device='cpu', save=False):
         **Config.learn_kwargs[algo_name],
     )
     model.learn(total_timesteps=Config.total_timesteps)
-    
+
     if save:
         if Config.env_name == 'SimpleBattleShip':
             rt = str(Field_Config.random_translation)
@@ -55,19 +55,22 @@ def inference(env, algo_name, device='cpu'):
     path = os.path.join('trained_models', modelfile)
     algo = Config.algo_dict[algo_name]
     model = algo.load(path, device=device)
-    state, _ = env.reset()
+    # state, _ = env.reset()
     np.random.seed(None)
 
-    while True:
-        env.render()
-        action, _ = model.predict(state, deterministic=True)
-        print('action =', action)
-        state, reward, terminated, truncated, info = env.step(action)
-        done = terminated or truncated
-        if done:
+    for i in range(100):
+        print('i =', i)
+        state, _ = env.reset()
+        while True:
             env.render()
-            print('done')
-            break
+            action, _ = model.predict(state, deterministic=True)
+            print('action =', action)
+            state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
+            if done:
+                env.render()
+                print('done')
+                break
 
 
 def main():
@@ -85,9 +88,7 @@ def main():
     elif args.mode == 'inference':
         print('start inference...')
         env = create_env(Config.env_name, render_mode='human')
-        for i in range(100):
-            print('i =', i)
-            inference(env, args.algo, device=device)
+        inference(env, args.algo, device=device)
     else:
         raise NotImplementedError
 

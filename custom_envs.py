@@ -50,7 +50,7 @@ class SimpleBattileShip(gym.Env):
         y = int(action[1])
         pattern = int(action[2])
         pattern_str = chr(ord('A') + int(pattern))
-        # print(f'x = {x}, y = {y}, pat = {pattern_str}')
+        print(f'x = {x}, y = {y}, pat = {pattern_str}')
         terminated = False
         truncated = False
         reward = -1
