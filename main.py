@@ -55,7 +55,6 @@ def inference(env, algo_name, device='cpu'):
     path = os.path.join('trained_models', modelfile)
     algo = Config.algo_dict[algo_name]
     model = algo.load(path, device=device)
-    # state, _ = env.reset()
     np.random.seed(None)
 
     for i in range(100):
