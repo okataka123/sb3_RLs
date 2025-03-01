@@ -13,10 +13,10 @@ def train(env, algo_name, device='cpu', save=False):
     algo = Config.algo_dict[algo_name]
 
     # tensorboardログ設定
+    seed = Config.seed
     if Config.env_name == 'SimpleBattleShip':
         rt = str(Field_Config.random_translation)
         pat = Field_Config.pattern
-        seed = Config.seed
         log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}')  # noqa: E501
     else:
         log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_seed_{seed}_{Config.total_timesteps}_{now}')  # noqa: E501
@@ -37,7 +37,7 @@ def train(env, algo_name, device='cpu', save=False):
             seed = Config.seed
             modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}'  # noqa: E501
         else:
-            modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}'
+            modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}_{now}'  # noqa: E501
         path = os.path.join('trained_models', modelfile)
         model.save(path)
 
