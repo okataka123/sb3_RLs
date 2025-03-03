@@ -1,11 +1,14 @@
-from cmath import polar
 import os
 import argparse
 import datetime as dt
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 import torch
+
 from config import Config, Field_Config, Inference_Config
 from env_wrapper import create_env
+from util import Util
 
 
 def train(env, algo_name, device='cpu', save=False):
@@ -57,16 +60,30 @@ def inference(env, algo_name, device='cpu'):
     model = algo.load(path, device=device)
     np.random.seed(None)
 
-    for i in range(100):
-        print('i =', i)
+    if Inference_Config.save_Q_fig:
+        Util.check_and_clean_directory('Q_figs')
+
+    for i in range(Inference_Config.n_episode):
+        print('i =', i+1)
         state, _ = env.reset()
+        step = 0
         while True:
+            if Inference_Config.save_Q_fig:
+                q_value = model.q_net.forward(model.policy.obs_to_tensor(state)[0]).detach().cpu().numpy()
+                q_value = q_value.reshape(8, 8)
+                plt.figure(figsize=(10, 6))
+                sns.heatmap(q_value, annot=True, fmt=".3f", cmap="viridis")
+                plt.savefig(f'Q_figs/q_val_step_{step}.png')
+            print(f'step: {step}')
             env.render()
             action, _ = model.predict(state, deterministic=True)
             print('action =', action)
             state, reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
+            step += 1
+
             if done:
+                print(f'step: {step}')
                 env.render()
                 print('done')
                 break
@@ -95,4 +112,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
