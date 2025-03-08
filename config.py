@@ -43,7 +43,7 @@ class Config:
 
 class Field_Config:
     # フィールドサイズ
-    grid_size = 8
+    grid_size = 16
     # 船の種類数
     num_ship_kind = 1
     # 陣形パターン
@@ -59,7 +59,8 @@ class Inference_Config:
     # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_False_64000_20250227-232357'
     # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_True_512000_20250228-001659'
     # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat4_seed_0_random_True_512000_20250303-231407'
-    pretrained_model_name = 'model_SimpleBattleShip_DQN_pat5_seed_0_random_False_512000_20250308-183840'
+    # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat5_seed_0_random_False_512000_20250308-183840' # 8×8
+    pretrained_model_name = 'model_SimpleBattleShip_DQN_pat5_seed_0_random_False_512000_20250308-192524' # 16×16
 
     # pretrained_model_name = 'model_Acrobot-v1_DQN_64000_20250301-221607'
     # pretrained_model_name = 'model_Acrobot-v1_DQN_256000_20250301-222022'

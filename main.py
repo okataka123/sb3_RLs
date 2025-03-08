@@ -21,7 +21,7 @@ def train(env, algo_name, device='cpu', save=False):
     if Config.env_name == 'SimpleBattleShip':
         rt = str(Field_Config.random_translation)
         pat = Field_Config.pattern
-        log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}')  # noqa: E501
+        log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}')  # noqa: E501
     else:
         log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_seed_{seed}_{Config.total_timesteps}_{now}')  # noqa: E501
 
@@ -39,7 +39,7 @@ def train(env, algo_name, device='cpu', save=False):
             rt = str(Field_Config.random_translation)
             pat = Field_Config.pattern
             seed = Config.seed
-            modelfile = f'model_{Config.env_name}_{algo_name}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}'  # noqa: E501
+            modelfile = f'model_{Config.env_name}_{algo_name}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}'  # noqa: E501
         else:
             modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}_{now}'  # noqa: E501
         path = os.path.join('trained_models', modelfile)
@@ -72,7 +72,7 @@ def inference(env, algo_name, device='cpu'):
         while True:
             if Inference_Config.save_Q_fig:
                 q_value = model.q_net.forward(model.policy.obs_to_tensor(state)[0]).detach().cpu().numpy()
-                q_value = q_value.reshape(8, 8)
+                q_value = q_value.reshape(Field_Config.grid_size, Field_Config.grid_size)
                 plt.figure(figsize=(10, 6))
                 sns.heatmap(q_value, annot=True, fmt=".3f", cmap="viridis")
                 plt.savefig(f'Q_figs/q_val_step_{step}.png')
