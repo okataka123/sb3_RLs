@@ -178,3 +178,5 @@ trained_models/
 !trained_models/.gitkeep
 Q_figs/
 !Q_figs/.gitkeep
+bkups/
+!bkups/.gitkeep

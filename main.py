@@ -1,5 +1,6 @@
 import os
 import argparse
+import random
 import datetime as dt
 import numpy as np
 import matplotlib.pyplot as plt
@@ -59,6 +60,7 @@ def inference(env, algo_name, device='cpu'):
     algo = Config.algo_dict[algo_name]
     model = algo.load(path, device=device)
     np.random.seed(None)
+    random.seed(None)
 
     if Inference_Config.save_Q_fig:
         Util.check_and_clean_directory('Q_figs')

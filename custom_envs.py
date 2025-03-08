@@ -50,7 +50,7 @@ class SimpleBattileShip(gym.Env):
         y = int(action[1])
         pattern = int(action[2])
         pattern_str = chr(ord('A') + int(pattern))
-        print(f'x = {x}, y = {y}, pat = {pattern_str}')
+        # print(f'x = {x}, y = {y}, pat = {pattern_str}')
         terminated = False
         truncated = False
         reward = -1
@@ -100,6 +100,34 @@ class SimpleBattileShip(gym.Env):
                 enemy_pos[(5, 2)] = 'A'
             else:
                 enemy_pos = self.generate_random_pos_pat4()
+
+        elif Field_Config.pattern == 5:
+            # field patren 4
+            if not Field_Config.random_translation:
+                enemy_pos = dict()
+                enemy_pos[(1, 3)] = 'A'
+                enemy_pos[(2, 2)] = 'A'; enemy_pos[(2, 4)] = 'A'
+                enemy_pos[(3, 1)] = 'A'; enemy_pos[(3, 2)] = 'A'; enemy_pos[(3, 4)] = 'A'; enemy_pos[(3, 5)] = 'A'; 
+                enemy_pos[(4, 0)] = 'A'; enemy_pos[(4, 3)] = 'A'; enemy_pos[(4, 6)] = 'A'
+                enemy_pos[(5, 1)] = 'A'; enemy_pos[(5, 2)] = 'A'; enemy_pos[(5, 4)] = 'A'; enemy_pos[(5, 5)] = 'A'; 
+                enemy_pos[(6, 2)] = 'A'; enemy_pos[(6, 4)] = 'A'
+                enemy_pos[(7, 3)] = 'A'
+
+                """
+                    [
+                        [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
+                        [' ' ' ' ' ' 'A' ' ' ' ' ' ' ' ']
+                        [' ' ' ' 'A' ' ' 'A' ' ' ' ' ' ']
+                        [' ' 'A' 'A' ' ' 'A' 'A' ' ' ' ']
+                        ['A' ' ' ' ' 'A' ' ' ' ' 'A' ' ']
+                        [' ' 'A' 'A' ' ' 'A' 'A' ' ' ' ']
+                        [' ' ' ' 'A' ' ' 'A' ' ' ' ' ' ']
+                        [' ' ' ' ' ' 'A' ' ' ' ' ' ' ' ']
+                    ]
+                    
+                """
+            else:
+                raise NotImplementedError
 
         else:
             raise NotImplementedError

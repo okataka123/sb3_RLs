@@ -47,9 +47,9 @@ class Field_Config:
     # 船の種類数
     num_ship_kind = 1
     # 陣形パターン
-    pattern = 4
+    pattern = 5
     # 陣形パターンを平行移動するかどうか？
-    random_translation = True
+    random_translation = False
 
 
 class Inference_Config:
@@ -57,7 +57,10 @@ class Inference_Config:
     save_Q_fig = True
     
     # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_False_64000_20250227-232357'
-    pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_True_512000_20250228-001659'
+    # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat1_seed_0_random_True_512000_20250228-001659'
+    # pretrained_model_name = 'model_SimpleBattleShip_DQN_pat4_seed_0_random_True_512000_20250303-231407'
+    pretrained_model_name = 'model_SimpleBattleShip_DQN_pat5_seed_0_random_False_512000_20250308-183840'
+
     # pretrained_model_name = 'model_Acrobot-v1_DQN_64000_20250301-221607'
     # pretrained_model_name = 'model_Acrobot-v1_DQN_256000_20250301-222022'
     # pretrained_model_name = 'model_MountainCar-v0_DQN_256000_20250301-235147'
