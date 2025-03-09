@@ -21,7 +21,7 @@ def train(env, algo_name, device='cpu', save=False):
     if Config.env_name == 'SimpleBattleShip':
         rt = str(Field_Config.random_translation)
         pat = Field_Config.pattern
-        log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}')  # noqa: E501
+        log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_l1_{Config.n_node_layer1}_l2_{Config.n_node_layer2}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}')  # noqa: E501
     else:
         log_path = os.path.join('tensorboard_log', f'{Config.env_name}_{algo_name}_seed_{seed}_{Config.total_timesteps}_{now}')  # noqa: E501
 
@@ -39,7 +39,7 @@ def train(env, algo_name, device='cpu', save=False):
             rt = str(Field_Config.random_translation)
             pat = Field_Config.pattern
             seed = Config.seed
-            modelfile = f'model_{Config.env_name}_{algo_name}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}'  # noqa: E501
+            modelfile = f'model_{Config.env_name}_{algo_name}_l1_{Config.n_node_layer1}_l2_{Config.n_node_layer2}_gridsize_{Field_Config.grid_size}_pat{pat}_seed_{seed}_random_{rt}_{Config.total_timesteps}_{now}'  # noqa: E501
         else:
             modelfile = f'model_{Config.env_name}_{algo_name}_{Config.total_timesteps}_{now}'  # noqa: E501
         path = os.path.join('trained_models', modelfile)

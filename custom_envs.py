@@ -127,7 +127,7 @@ class SimpleBattileShip(gym.Env):
                     
                 """
             else:
-                raise NotImplementedError
+                enemy_pos = self.generate_random_pos_pat5()
 
         else:
             raise NotImplementedError
@@ -137,13 +137,15 @@ class SimpleBattileShip(gym.Env):
 
 
     def generate_random_pos_pat1(self):
+        W = Field_Config.grid_size
+        H = Field_Config.grid_size
         diff_x = 3
         while True:
-            row_1 = np.random.randint(0, 8)
-            col_1 = np.random.randint(0, 8)
+            row_1 = np.random.randint(0, H)
+            col_1 = np.random.randint(0, W)
             row_2 = row_1
             col_2 = col_1 + diff_x
-            cond = (col_2 < 8)
+            cond = (col_2 < W)
             if cond:
                 enemy_pos = dict()
                 enemy_pos[(row_1, col_1)] = 'A'
@@ -154,6 +156,8 @@ class SimpleBattileShip(gym.Env):
 
 
     def generate_random_pos_pat4(self):
+        W = Field_Config.grid_size
+        H = Field_Config.grid_size
         diff_x_1 = 3
         diff_y_1 = 0
         diff_x_2 = 0
@@ -161,15 +165,15 @@ class SimpleBattileShip(gym.Env):
         diff_x_3 = 3
         diff_y_3 = 3
         while True:
-            row_1 = np.random.randint(0, 8)
-            col_1 = np.random.randint(0, 8)
+            row_1 = np.random.randint(0, H)
+            col_1 = np.random.randint(0, W)
             row_2 = row_1 + diff_y_1
             col_2 = col_1 + diff_x_1
             row_3 = row_1 + diff_y_2
             col_3 = col_1 + diff_x_2
             row_4 = row_1 + diff_y_3
             col_4 = col_1 + diff_x_3
-            cond = (row_2 < 8) & (col_2 < 8) & (row_3 < 8) & (col_3 < 8) & (row_4 < 8) & (col_4 < 8)  # noqa: E501
+            cond = (row_2 < H) & (col_2 < W) & (row_3 < H) & (col_3 < W) & (row_4 < H) & (col_4 < W)  # noqa: E501
             if cond:
                 enemy_pos = dict()
                 enemy_pos[(row_1, col_1)] = 'A'
@@ -180,6 +184,42 @@ class SimpleBattileShip(gym.Env):
                 break
         return enemy_pos
 
+
+    def generate_random_pos_pat5(self):
+        W = Field_Config.grid_size
+        H = Field_Config.grid_size
+        diff_top_to_bottom_x = 0
+        diff_top_to_bottom_y = 6
+        diff_top_to_right_x = 3
+        diff_top_to_right_y = 3
+        diff_top_to_left_x = -3
+        diff_top_to_left_y = 3
+        while True:
+            row_top = np.random.randint(0, H)
+            col_top = np.random.randint(0, W)
+            row_bottom = row_top + diff_top_to_bottom_y
+            col_bottom = col_top + diff_top_to_bottom_x
+            row_right = row_top + diff_top_to_right_y
+            col_right = col_top + diff_top_to_right_x
+            row_left = row_top + diff_top_to_left_y
+            col_left = col_top + diff_top_to_left_x
+            cond = (0 <= row_bottom < H) & (0 <= col_bottom < W) & \
+                (0 <= row_right < H) & (0 <= col_right < W) & \
+                (0 <= row_left < H) & (0 <= col_left < W)
+            if cond:
+                enemy_pos = dict()
+                dy = row_top - 1 
+                dx = col_top - 3
+                enemy_pos[(row_top, col_top)] = 'A'
+                enemy_pos[(2+dy, 2+dx)] = 'A'; enemy_pos[(2+dy, 4+dx)] = 'A'
+                enemy_pos[(3+dy, 1+dx)] = 'A'; enemy_pos[(3+dy, 2+dx)] = 'A'; enemy_pos[(3+dy, 4+dx)] = 'A'; enemy_pos[(3+dy, 5+dx)] = 'A'; 
+                enemy_pos[(4+dy, 0+dx)] = 'A'; enemy_pos[(4+dy, 3+dx)] = 'A'; enemy_pos[(4+dy, 6+dx)] = 'A'
+                enemy_pos[(5+dy, 1+dx)] = 'A'; enemy_pos[(5+dy, 2+dx)] = 'A'; enemy_pos[(5+dy, 4+dx)] = 'A'; enemy_pos[(5+dy, 5+dx)] = 'A'; 
+                enemy_pos[(6+dy, 2+dx)] = 'A'; enemy_pos[(6+dy, 4+dx)] = 'A'
+                enemy_pos[(7+dy, 3+dx)] = 'A'
+                print('enemy_pos =', enemy_pos)
+                break
+        return enemy_pos    
 
 
 def test_env():

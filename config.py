@@ -1,8 +1,8 @@
 from stable_baselines3 import PPO, DQN, A2C, SAC
 
 class Config:
-    # total_timesteps = 1024000
-    total_timesteps = 512000
+    total_timesteps = 1024000
+    # total_timesteps = 512000
     # total_timesteps = 256000
     # total_timesteps = 128000
     # total_timesteps = 64000
@@ -22,6 +22,8 @@ class Config:
 
     # DQN params
     batch_size = 128
+    n_node_layer1 = 256
+    n_node_layer2 = 256
     seed = 0
     tau = 0.001
 
@@ -32,7 +34,7 @@ class Config:
             'seed': seed,
             'tau': tau,
             'policy_kwargs': {
-                'net_arch': [128, 128],
+                'net_arch': [n_node_layer1, n_node_layer2],
             },
         },
         'PPO': {},
@@ -49,7 +51,7 @@ class Field_Config:
     # 陣形パターン
     pattern = 5
     # 陣形パターンを平行移動するかどうか？
-    random_translation = False
+    random_translation = True
 
 
 class Inference_Config:
