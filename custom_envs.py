@@ -36,7 +36,8 @@ class SimpleBattileShip(gym.Env):
         self.state_gui[random_x, random_y] = random_value_str
         self.n_detected = 1
         info = {}
-        return torch.FloatTensor(self.state), info
+        self.state = torch.FloatTensor(self.state)
+        return self.state, info
 
 
     def step(self, action):

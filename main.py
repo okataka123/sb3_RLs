@@ -1,6 +1,7 @@
 import os
 import argparse
 import random
+import pickle
 import datetime as dt
 import numpy as np
 import matplotlib.pyplot as plt
@@ -47,6 +48,10 @@ def train(env, algo_name, device='cpu', save=False):
 
 
 def inference(env, algo_name, device='cpu'):
+    '''
+    学習済みモデルを用いて推論を行う関数。
+    1エピソード実行し、その際のQ値画像を出力する。
+    '''
     modelfile = Inference_Config.pretrained_model_name
 
     if Config.env_name not in modelfile:
@@ -91,6 +96,59 @@ def inference(env, algo_name, device='cpu'):
                 break
 
 
+def rollout(env, algo_name, device='cpu'):
+    '''
+    学習済みモデルを用いて数エピソード回し、経験データを取得する。
+    '''
+    modelfile = Inference_Config.pretrained_model_name
+
+    if Config.env_name not in modelfile:
+        print('[error] The model file name and environment name do not match.')
+        assert False
+    if algo_name not in modelfile:
+        print('[error] The model file name and algo_name do not match.')
+        assert False
+    
+    path = os.path.join('trained_models', modelfile)
+    algo = Config.algo_dict[algo_name]
+    model = algo.load(path, device=device)
+    np.random.seed(None)
+    random.seed(None)
+
+    # 経験値データを格納する。
+    # [(state, action, reward, answer)]
+    experiences = []
+
+    for i in range(10000):
+        print('i =', i+1)
+        state, _ = env.reset()
+        step = 0
+        while True:
+            print(f'step: {step}')
+            env.render()
+            action, _ = model.predict(state, deterministic=True)
+            print('action =', action)
+            prev_state = state.clone()
+            state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
+            step += 1
+
+            experiences.append((prev_state, action, reward, env.enemy_pos))
+
+            if done:
+                print(f'step: {step}')
+                env.render()
+                print('done')
+                break
+    # print('experiences')
+    # print(experiences)
+
+    # 経験データを保存
+    with open('behavior_cloning/experiences/experiences.pkl', 'wb') as f:
+        pickle.dump(experiences, f)
+
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('mode')
@@ -107,6 +165,12 @@ def main():
         print('start inference...')
         env = create_env(Config.env_name, render_mode='human')
         inference(env, args.algo, device=device)
+    
+    elif args.mode == 'rollout':
+        print('start rollout...')
+        env = create_env(Config.env_name, render_mode='human')
+        rollout(env, args.algo, device=device)    
+
     else:
         raise NotImplementedError
 
